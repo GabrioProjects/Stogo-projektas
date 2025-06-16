@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stogo Kainų Skaičiuoklė</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9fafb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 8px;
+            color: #2563eb;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background-color: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #2563eb;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .results {
+            background-color: #eff6ff;
+            border: 2px solid #bfdbfe;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .results h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .result-label {
+            color: #6b7280;
+        }
+
+        .result-value {
+            font-weight: 500;
+        }
+
+        .total-row {
+            border-top: 1px solid #d1d5db;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .total-row .result-value {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .notes {
+            background-color: #fefce8;
+            border: 1px solid #fde047;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .notes h4 {
+            font-weight: 500;
+            color: #a16207;
+            margin-bottom: 8px;
+        }
+
+        .notes ul {
+            list-style: none;
+            color: #a16207;
+            font-size: 0.875rem;
+        }
+
+        .notes li {
+            margin-bottom: 4px;
+        }
+
+        .contact {
+            background-color: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+        }
+
+        .contact h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .contact p {
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .contact-info div {
+            margin-bottom: 8px;
+        }
+
+        .contact-info .label {
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                <h1>Stogo Kainų Skaičiuoklė</h1>
+            </div>
+            <p>Gaukite momentinę jūsų stogo projekto kainą</p>
+        </div>
+
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="inputs">
+                <!-- Measurements -->
+                <div class="section">
+                    <h3>
+                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        Stogo Matmenys
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="length">Ilgis (metrai)</label>
+                            <input type="number" id="length" class="form-control" placeholder="12">
+                        </div>
+                        <div class="form-group">
+                            <label for="width">Plotis (metrai)</label>
+                            <input type="number" id="width" class="form-control" placeholder="9">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pitch">Stogo Nuolydis</label>
+                        <select id="pitch" class="form-control">
+                            <option value="low">Mažas nuolydis (15° - 25°)</option>
+                            <option value="standard" selected>Standartinis nuolydis (25° - 37°)</option>
+                            <option value="steep">Didelis nuolydis (37° - 45°)</option>
+                            <option value="extreme">Labai didelis nuolydis (45°+)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Materials -->
+                <div class="section">
+                    <h3>Medžiagų Pasirinkimas</h3>
+                    <div class="form-group">
+                        <label for="materialType">Medžiagos Tipas</label>
+                        <select id="materialType" class="form-control">
+                            <option value="asphalt" selected>Bituminės čerpės</option>
+                            <option value="metal">Metalinis dangalas</option>
+                            <option value="tile">Molio/betono čerpės</option>
+                            <option value="slate">Šiferis</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quality">Kokybės Lygis</label>
+                        <select id="quality" class="form-control">
+                            <option value="standard" selected>Standartinė</option>
+                            <option value="premium">Aukšta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Complexity -->
+                <div class="section">
+                    <h3>Projekto Sudėtingumas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="levels">Stogo Lygiai</label>
+                            <input type="number" id="levels" class="form-control" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="chimneys">Kaminai</label>
+                            <input type="number" id="chimneys" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="skylights">Stoglangiai</label>
+                            <input type="number" id="skylights" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="valleys">Stogo slėniai</label>
+                            <input type="number" id="valleys" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="outputs">
+                <div id="results" class="results hidden">
+                    <h3>
+                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                        Kainų Įvertinimas
+                    </h3>
+                    <div class="result-row">
+                        <span class="result-label">Stogo plotas:</span>
+                        <span class="result-value" id="roofArea">0 m²</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Medžiagos:</span>
+                        <span class="result-value" id="materialCost">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Darbai:</span>
+                        <span class="result-value" id="laborCost">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Antkainis (25%):</span>
+                        <span class="result-value" id="markup">€0</span>
+                    </div>
+                    <div class="result-row total-row">
+                        <span class="result-label">Bendra kaina:</span>
+                        <span class="result-value" id="total">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Už kvadratinį metrą:</span>
+                        <span class="result-value" id="perSqFt">€0</span>
+                    </div>
+                </div>
+
+                <div class="notes">
+                    <h4>Svarbu žinoti:</h4>
+                    <ul>
+                        <li>• Tai preliminarus kainų įvertinimas</li>
+                        <li>• Galutinė kaina gali keistis priklausomai nuo objekto sąlygų</li>
+                        <li>• Leidimai ir šalinimo kaštai nėra įskaičiuoti</li>
+                        <li>• Susisiekite su mumis dėl detalaus pasiūlymo</li>
+                    </ul>
+                </div>
+
+                <div class="contact">
+                    <h3>Pasiruošę pradėti?</h3>
+                    <p>Susisiekite su mumis šiandien ir gaukite nemokamą detalų įvertinimą bei objekto apžiūrą.</p>
+                    <div class="contact-info">
+                        <div>
+                            <span class="label">Telefonas:</span>
+                            <span>+370 612 34567</span>
+                        </div>
+                        <div>
+                            <span class="label">El. paštas:</span>
+                            <span>info@stogai.lt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Kainų duomenys (tikroje aplikacijoje šie duomenys būtų iš jūsų skaičiuoklės/duombazės)
+        const pricingData = {
+            materials: {
+                asphalt: { standard: 35.00, premium: 55.00 }, // EUR už m²
+                metal: { standard: 80.00, premium: 120.00 },
+                tile: { standard: 70.00, premium: 100.00 },
+                slate: { standard: 150.00, premium: 200.00 }
+            },
+            labor: {
+                baseRate: 40.00, // EUR už m²
+                pitchMultiplier: {
+                    low: 1.0,
+                    standard: 1.2,
+                    steep: 1.5,
+                    extreme: 2.0
+                }
+            },
+            complexity: {
+                additionalLevel: 5.00, // EUR už m²
+                chimney: 200, // EUR už vienetą
+                skylight: 150,
+                valley: 100
+            }
+        };
+
+        // Get all input elements
+        const inputs = {
+            length: document.getElementById('length'),
+            width: document.getElementById('width'),
+            pitch: document.getElementById('pitch'),
+            materialType: document.getElementById('materialType'),
+            quality: document.getElementById('quality'),
+            levels: document.getElementById('levels'),
+            chimneys: document.getElementById('chimneys'),
+            skylights: document.getElementById('skylights'),
+            valleys: document.getElementById('valleys')
+        };
+
+        // Get result elements
+        const results = {
+            container: document.getElementById('results'),
+            roofArea: document.getElementById('roofArea'),
+            materialCost: document.getElementById('materialCost'),
+            laborCost: document.getElementById('laborCost'),
+            markup: document.getElementById('markup'),
+            total: document.getElementById('total'),
+            perSqFt: document.getElementById('perSqFt')
+        };
+
+        function calculateEstimate() {
+            const length = parseFloat(inputs.length.value) || 0;
+            const width = parseFloat(inputs.width.value) || 0;
+            const baseArea = length * width;
+
+            if (baseArea === 0) {
+                results.container.classList.add('hidden');
+                return;
+            }
+
+            // Apskaičiuojame faktinį stogo plotą su nuolydžiu
+            const pitchMultipliers = {
+                low: 1.05,
+                standard: 1.15,
+                steep: 1.3,
+                extreme: 1.5
+            };
+
+            const roofArea = baseArea * pitchMultipliers[inputs.pitch.value];
+
+            // Medžiagų kaštai
+            const materialCostPerSqM = pricingData.materials[inputs.materialType.value][inputs.quality.value];
+            const materialCost = roofArea * materialCostPerSqM;
+
+            // Darbo kaštai
+            const laborRate = pricingData.labor.baseRate * pricingData.labor.pitchMultiplier[inputs.pitch.value];
+            const baseLaborCost = roofArea * laborRate;
+
+            // Sudėtingumo priedai
+            const levels = parseInt(inputs.levels.value) || 1;
+            const chimneys = parseInt(inputs.chimneys.value) || 0;
+            const skylights = parseInt(inputs.skylights.value) || 0;
+            const valleys = parseInt(inputs.valleys.value) || 0;
+
+            const complexityAdditions = 
+                (levels - 1) * roofArea * pricingData.complexity.additionalLevel +
+                chimneys * pricingData.complexity.chimney +
+                skylights * pricingData.complexity.skylight +
+                valleys * pricingData.complexity.valley;
+
+            const totalLaborCost = baseLaborCost + complexityAdditions;
+
+            // Suma ir antkainis
+            const subtotal = materialCost + totalLaborCost;
+            const markupAmount = subtotal * 0.25; // 25% antkainis
+            const total = subtotal + markupAmount;
+
+            // Atnaujinti rodmenis
+            results.roofArea.textContent = Math.round(roofArea) + ' m²';
+            results.materialCost.textContent = '€' + Math.round(materialCost).toLocaleString();
+            results.laborCost.textContent = '€' + Math.round(totalLaborCost).toLocaleString();
+            results.markup.textContent = '€' + Math.round(markupAmount).toLocaleString();
+            results.total.textContent = '€' + Math.round(total).toLocaleString();
+            results.perSqFt.textContent = '€' + (Math.round(total / roofArea * 100) / 100).toFixed(2);
+
+            // Show results
+            results.container.classList.remove('hidden');
+        }
+
+        // Add event listeners to all inputs
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', calculateEstimate);
+            input.addEventListener('change', calculateEstimate);
+        });
+
+        // Initial calculation
+        calculateEstimate();
+    </script>
+</body>
+</html>
