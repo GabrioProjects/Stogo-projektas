@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stogo Kainų Skaičiuoklė</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html">Pradžia</a>
+            <a href="calculator.html"class="active">Skaičiuoklė</a>
+            <a href="projects.html">Projektai</a>
+            <a href="contacts.html">Kontaktai</a>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Header -->
+          <div class="page-header">
+            <h1>Stogo Kainų Skaičiuoklė</h1>
+            <p>Gaukite momentinę jūsų stogo projekto kainą</p>
+        </div>
+        
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="inputs">
+                <!-- Measurements -->
+                <div class="section">
+                    <h3>
+                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Stogo Matmenys
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="length">Ilgis (metrai)</label>
+                            <input type="number" id="length" class="form-control" placeholder="12">
+                        </div>
+                        <div class="form-group">
+                            <label for="width">Plotis (metrai)</label>
+                            <input type="number" id="width" class="form-control" placeholder="9">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pitch">Stogo Nuolydis</label>
+                        <select id="pitch" class="form-control">
+                            <option value="low">Mažas nuolydis (15° - 25°)</option>
+                            <option value="standard" selected>Standartinis nuolydis (25° - 37°)</option>
+                            <option value="steep">Didelis nuolydis (37° - 45°)</option>
+                            <option value="extreme">Labai didelis nuolydis (45°+)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Materials -->
+                <div class="section">
+                    <h3>Medžiagų Pasirinkimas</h3>
+                    <div class="form-group">
+                        <label for="materialType">Medžiagos Tipas</label>
+                        <select id="materialType" class="form-control">
+                            <option value="asphalt" selected>Bituminės čerpės</option>
+                            <option value="metal">Metalinis dangalas</option>
+                            <option value="tile">Molio/betono čerpės</option>
+                            <option value="slate">Šiferis</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quality">Kokybės Lygis</label>
+                        <select id="quality" class="form-control">
+                            <option value="standard" selected>Standartinė</option>
+                            <option value="premium">Aukšta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Complexity -->
+                <div class="section">
+                    <h3>Projekto Sudėtingumas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="levels">Stogo Lygiai</label>
+                            <input type="number" id="levels" class="form-control" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="chimneys">Kaminai</label>
+                            <input type="number" id="chimneys" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="skylights">Stoglangiai</label>
+                            <input type="number" id="skylights" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="valleys">Stogo slėniai</label>
+                            <input type="number" id="valleys" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="outputs">
+                <div id="results" class="results hidden">
+                    <h3>
+                        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
+                            </path>
+                        </svg>
+                        Kainų Įvertinimas
+                    </h3>
+                    <div class="result-row">
+                        <span class="result-label">Stogo plotas:</span>
+                        <span class="result-value" id="roofArea">0 m²</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Medžiagos:</span>
+                        <span class="result-value" id="materialCost">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Darbai:</span>
+                        <span class="result-value" id="laborCost">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Antkainis (25%):</span>
+                        <span class="result-value" id="markup">€0</span>
+                    </div>
+                    <div class="result-row total-row">
+                        <span class="result-label">Bendra kaina:</span>
+                        <span class="result-value" id="total">€0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Už kvadratinį metrą:</span>
+                        <span class="result-value" id="perSqFt">€0</span>
+                    </div>
+                </div>
+
+                <div class="notes">
+                    <h4>Svarbu žinoti:</h4>
+                    <ul>
+                        <li>• Tai preliminarus kainų įvertinimas</li>
+                        <li>• Galutinė kaina gali keistis priklausomai nuo objekto sąlygų</li>
+                        <li>• Leidimai ir šalinimo kaštai nėra įskaičiuoti</li>
+                        <li>• Susisiekite su mumis dėl detalaus pasiūlymo</li>
+                    </ul>
+                </div>
+
+        <!-- Call to Action -->
+        <div class="projects-cta">
+            <h2>Patiko kainą?</h2>
+            <p>Susisiekite su mumis ir mes padarysime tokį pat profesionalų darbą jūsų namams.</p>
+            <div class="cta-buttons">
+                <a href="contacts.html" class="btn btn-primary">Susisiekti</a>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
