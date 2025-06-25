@@ -31,6 +31,12 @@ async function calculateEstimate() {
         return;
     }
     
+    // Show loading state
+    const calculateBtn = document.getElementById('calculateBtn');
+    const originalText = calculateBtn.textContent;
+    calculateBtn.textContent = 'Skaičiuojama...';
+    calculateBtn.disabled = true;
+    
     // Prepare data to send to PHP
     const calculationData = {
         length: length,
@@ -54,7 +60,21 @@ async function calculateEstimate() {
             body: JSON.stringify(calculationData)
         });
         
-        const data = await response.json();
+        // Check if response is ok
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const responseText = await response.text();
+        
+        // Try to parse JSON
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (jsonError) {
+            console.error('Invalid JSON response:', responseText);
+            throw new Error('Server returned invalid response');
+        }
         
         if (data.error) {
             console.error('Calculation error:', data.error);
@@ -75,15 +95,19 @@ async function calculateEstimate() {
         
     } catch (error) {
         console.error('Error calculating estimate:', error);
+        alert('Klaida skaičiuojant kainą. Bandykite dar kartą arba susisiekite su mumis.');
         results.container.classList.add('hidden');
+    } finally {
+        // Reset button
+        calculateBtn.textContent = originalText;
+        calculateBtn.disabled = false;
     }
 }
 
-// Add event listeners to all inputs
-Object.values(inputs).forEach(input => {
-    input.addEventListener('input', calculateEstimate);
-    input.addEventListener('change', calculateEstimate);
+// Add calculate button event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const calculateBtn = document.getElementById('calculateBtn');
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', calculateEstimate);
+    }
 });
-
-// Initial calculation
-calculateEstimate();
